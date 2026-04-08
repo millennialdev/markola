@@ -22,7 +22,7 @@ DETECTION_THRESHOLD="${DETECTION_THRESHOLD:-2}"       # consecutive polls before
 GRACE_PERIOD_POLLS="${GRACE_PERIOD_POLLS:-6}"          # polls after meeting disappears (30s)
 
 # Whisper
-WHISPER_BIN="${WHISPER_BIN:-$(which whisper-cpp 2>/dev/null || echo "/opt/homebrew/bin/whisper-cpp")}"
+WHISPER_BIN="${WHISPER_BIN:-$(which whisper-cli 2>/dev/null || echo "/opt/homebrew/bin/whisper-cli")}"
 WHISPER_MODEL="${WHISPER_MODEL:-$HOME/.local/share/whisper-cpp/models/ggml-medium.bin}"
 WHISPER_THREADS="${WHISPER_THREADS:-6}"
 WHISPER_LANGUAGE="${WHISPER_LANGUAGE:-en}"

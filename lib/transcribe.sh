@@ -31,11 +31,11 @@ transcribe_audio() {
 
     "$WHISPER_BIN" \
         -m "$WHISPER_MODEL" \
-        -f "$audio_path" \
         -otxt \
         -of "$base_path" \
-        --threads "$WHISPER_THREADS" \
-        --language "$WHISPER_LANGUAGE" \
+        -t "$WHISPER_THREADS" \
+        -l "$WHISPER_LANGUAGE" \
+        "$audio_path" \
         2>"$MARKOLA_LOG_DIR/whisper-stderr.log"
 
     local exit_code=$?
