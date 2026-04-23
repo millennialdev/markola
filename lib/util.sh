@@ -2,7 +2,9 @@
 # Shared utilities: logging, notifications, cleanup
 
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] $*"
+    # Write to stderr so functions that echo a return value (e.g. transcribe()
+    # echoing the transcript path) don't get their output corrupted by log lines.
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] $*" >&2
 }
 
 warn() {
