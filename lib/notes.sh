@@ -56,15 +56,18 @@ generate_meeting_notes() {
         return
     fi
 
-    # Save to Obsidian
-    save_to_obsidian "$note_content" "$start_epoch" "$title"
+    # Save to Obsidian (bucketed by platform)
+    save_to_obsidian "$note_content" "$start_epoch" "$title" "$platform_tag"
 }
 
-# Save note content to Obsidian vault
+# Save note content to Obsidian vault, bucketed under platform-type subdir.
+# Path layout: $OBSIDIAN_MEETINGS_DIR/<platform>/YYYY-MM-DD_HHMMSS_title.md
+# e.g. ~/Documents/markola/zoom/2026-04-23_143012_daily-standup.md
 save_to_obsidian() {
     local content="$1"
     local start_epoch="$2"
     local title="$3"
+    local platform_tag="${4:-uncategorized}"
 
     local date_part time_part sanitized_title filename
     date_part=$(date -r "$start_epoch" '+%Y-%m-%d')
@@ -72,7 +75,9 @@ save_to_obsidian() {
     sanitized_title=$(sanitize_title "$title")
     filename="${date_part}_${time_part}_${sanitized_title}.md"
 
-    local note_path="$OBSIDIAN_MEETINGS_DIR/$filename"
+    local note_dir="$OBSIDIAN_MEETINGS_DIR/$platform_tag"
+    mkdir -p "$note_dir"
+    local note_path="$note_dir/$filename"
     echo "$content" > "$note_path"
     notify_notes_ready "$note_path"
 }
@@ -108,7 +113,7 @@ Transcription failed. Audio file preserved for manual retry.
 
 To retry: \`markola process $audio_path\`
 "
-    save_to_obsidian "$content" "$start_epoch" "$title"
+    save_to_obsidian "$content" "$start_epoch" "$title" "$platform_tag"
 }
 
 # Generate a note with raw transcript when Claude fails
@@ -144,7 +149,7 @@ To regenerate: \`markola process ${transcript_path%.txt}.wav\`
 
 $transcript
 "
-    save_to_obsidian "$content" "$start_epoch" "$title"
+    save_to_obsidian "$content" "$start_epoch" "$title" "$platform_tag"
 }
 
 # Full processing pipeline for a recording
