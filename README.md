@@ -15,11 +15,28 @@ Meeting detected → ffmpeg records (mic + system audio via BlackHole)
 
 ## Supported Platforms
 
+**Specific detectors** (clean platform tag + bucketed output):
 - Google Meet (Chrome)
 - Zoom
 - FaceTime
 - Phone calls via Mac (iPhone Continuity)
 - Google Voice (Chrome)
+- Microsoft Teams (desktop or web)
+- WhatsApp (desktop or web)
+- Facebook Messenger (desktop or web)
+- Instagram DM calls (web)
+- Snapchat (desktop or web)
+
+**Hybrid catch-all** — any app that opens an active mic session (via
+`avconferenced`) and is NOT on the blocklist gets recorded and bucketed
+under the app name. Covers Discord voice, Skype, Slack huddles, Telegram
+calls, and any VoIP app not explicitly supported.
+
+**Blocklist** (audio-using apps that do NOT trigger recording):
+Streaming (Spotify, Music, Netflix, Plex, VLC, YouTube), dictation
+(VoiceInk, macOS dictation, whisper-cli), audio production (Audio Hijack,
+Loopback, GarageBand, Logic Pro), markola itself, and already-detected
+platforms (no double-fire).
 
 ## Quick Start
 
