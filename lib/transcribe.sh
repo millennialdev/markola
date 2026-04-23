@@ -29,6 +29,9 @@ transcribe_audio() {
     local start_time
     start_time=$(date +%s)
 
+    # Redirect BOTH stdout and stderr — whisper's transcript-preview stdout was
+    # leaking into the function's `echo "$transcript_path"` and corrupting the
+    # captured path in callers (`process` command broke with "No such file").
     "$WHISPER_BIN" \
         -m "$WHISPER_MODEL" \
         -otxt \
@@ -36,7 +39,8 @@ transcribe_audio() {
         -t "$WHISPER_THREADS" \
         -l "$WHISPER_LANGUAGE" \
         "$audio_path" \
-        2>"$MARKOLA_LOG_DIR/whisper-stderr.log"
+        >>"$MARKOLA_LOG_DIR/whisper-stderr.log" \
+        2>>"$MARKOLA_LOG_DIR/whisper-stderr.log"
 
     local exit_code=$?
     local end_time
